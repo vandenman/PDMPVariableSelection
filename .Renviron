@@ -1,0 +1,6 @@
+# Keep renv's system-library sandbox active for every project session.
+RENV_CONFIG_SANDBOX_ENABLED=TRUE
+
+# Skip the project-library/lockfile synchronization check on startup.
+# Run renv::status() or renv::snapshot() explicitly when maintaining renv.lock.
+RENV_CONFIG_SYNCHRONIZED_CHECK=FALSE

@@ -1,0 +1,11 @@
+scripts/Research
+scripts/Manual
+scripts/deprecated
+*.so
+*.o
+deleteme_later
+.Rproj.user/*
+Rproj.user
+.Rproj.user
+/renv
+scripts_backups

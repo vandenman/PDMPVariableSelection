@@ -1,0 +1,20 @@
+# This file limits renv dependency discovery for snapshot()/status(); it does
+# not affect the system-library sandbox or normal R startup.
+# Generated simulation data and condition-level fit artifacts are not R
+# dependencies.  Exclude the complete output tree from renv discovery.
+simulation_results/
+
+# Generated empirical outputs, plots, and manuscript tables are not R
+# dependencies either.
+results/
+figures/
+
+# Raw/generated data and Stan build artifacts are inputs or compiled outputs,
+# not sources from which this project's R package dependencies are inferred.
+data/
+stanmodels/
+
+# Archived scripts are retained for provenance but are not part of the active
+# simulation and analysis entry points.
+scripts_backup/
+scripts/Research/
