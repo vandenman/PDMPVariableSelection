@@ -101,13 +101,15 @@ edge_index <- function(p) {
 }
 
 # Settings shared by every PDMP fit (see the supplement for their meaning).
+# Require the simplified interface; old packages use different defaults.
+if ("prior_stanmodel" %in% names(formals(PDMPSamplersR::pdmp_sample_from_stanmodel)))
+  stop("Install PDMPSamplersR with the simplified GridThinning interface.")
+
 pdmp_settings <- list(
   algorithm = "GridThinningStrategy",
   grid_n = 5L, grid_t_max = 4, grid_bound = "value_quadratic",
   grid_curvature_bound = 10000, curvature_backend = "exact",
-  c0 = 0.01, adaptive_scheme = "diagonal", post_warmup_simplify = TRUE,
-  lazy_low_tightness_threshold = 0, lazy_max_low_tightness_rejections = 100000L,
-  lazy_max_rejections = 100000L,
+  c0 = 0.01, adaptive_scheme = "diagonal",
   online_batches = 400L,         # fine batches; estimates use 40 of them
   warmup_batches = 100L,         # warmup batches, for the time to convergence
   anchor_bank_T = 20,            # full-gradient time that supplies the anchors
@@ -145,7 +147,6 @@ adaptation_interval <- c(PreconditionedZigZag = NA, PreconditionedBPS = 1,
 #                    Without x0_sd, every coordinate starts with scale 1 and,
 #                    for the Boomerang, reference centre 0 (no information from
 #                    the mode).
-#   full_gradient    optional analytic full-gradient provider (OMRF)
 #   subsampling      optional function(parameter_names) returning
 #                    list(subsampling = stan_subsampling(...), args = extra
 #                    pdmp_sample_from_stanmodel arguments, bank_metric =
@@ -171,15 +172,13 @@ adaptation_interval <- c(PreconditionedZigZag = NA, PreconditionedBPS = 1,
 # and subsampled gradients for the retained trajectory.
 fit_pdmp <- function(model, stan_data, prior_standata, dynamic, sticky_prior,
                      selectable, x0, warmup_T, retained_T, seed, work_dir,
-                     x0_sd = NULL, full_gradient = NULL, subsampling = NULL,
+                     x0_sd = NULL, subsampling = NULL,
                      curvature_backend = pdmp_settings$curvature_backend,
                      trajectory_dt = NULL) {
   compiled <- compile_pdmp_stan_model(normalizePath(stan_file(model)))
   parameter_names <- stan_parameter_mapping(compiled, stan_data)$name
   common <- c(pdmp_settings[c("algorithm", "grid_n", "grid_t_max", "grid_bound",
-    "grid_curvature_bound", "curvature_backend", "c0", "adaptive_scheme",
-    "post_warmup_simplify", "lazy_low_tightness_threshold",
-    "lazy_max_low_tightness_rejections", "lazy_max_rejections")], list(
+    "grid_curvature_bound", "curvature_backend", "c0", "adaptive_scheme")], list(
     path_to_stanmodel = compiled, standata = stan_data, flow = dynamic,
     refresh_rate = refresh_rate[[dynamic]],
     warmup_adaptation_interval = if (!is.na(adaptation_interval[[dynamic]]))
@@ -188,7 +187,6 @@ fit_pdmp <- function(model, stan_data, prior_standata, dynamic, sticky_prior,
     model_prior = sticky_prior$model_prior,
     parameter_prior = sticky_prior$parameter_prior,
     slab_prior = sticky_prior$slab_prior,
-    prior_stanmodel = if (is.null(sticky_prior$slab_prior)) NULL else compiled,
     show_progress = FALSE, seed = seed, materialize = FALSE,
     trace_storage = "streaming"))
   common$curvature_backend <- curvature_backend
@@ -207,14 +205,12 @@ fit_pdmp <- function(model, stan_data, prior_standata, dynamic, sticky_prior,
          elapsed = elapsed[["elapsed"]])
   }
   full_gradient_run <- function(stage, retained, grid_spacing = NA) run(
-    stage, grid_spacing, full_gradient = full_gradient, t0 = 0,
+    stage, grid_spacing, t0 = 0,
     t_warmup = warmup_T, T = warmup_T + retained, x0 = x0,
     flow_cov = if (is.null(x0_sd)) diag(length(x0)) else diag(ifelse(selectable,
       (pdmp_settings$selectable_speed * x0_sd)^2, x0_sd^2)),
     flow_mean = if (is.null(x0_sd)) numeric(length(x0)) else ifelse(selectable, 0, x0),
     flow_specification = "initial",
-    # The prior-only data are needed for a separate slab.
-    prior_standata = if (!is.null(sticky_prior$slab_prior)) prior_standata,
     support_boundary = support_boundary_control(
       mode = if (dynamic == "PreconditionedBPS")
         "line_search_truncated_refresh" else "error"))
@@ -234,7 +230,7 @@ fit_pdmp <- function(model, stan_data, prior_standata, dynamic, sticky_prior,
                                    warmup$online$grid_x,
                                    metric = s$bank_metric %||% "scaled"))[["elapsed"]]
     main <- do.call(run, c(list("main", main_grid), s$args, list(
-      subsampling = s$subsampling, prior_standata = prior_standata,
+      subsampling = s$subsampling,
       t0 = end$time, t_warmup = 0, T = end$time + retained_T,
       x0 = end$position, theta0 = end$physical_velocity,
       free0 = end$free_mask, stored_velocity0 = end$stored_frozen_velocity,
@@ -242,7 +238,7 @@ fit_pdmp <- function(model, stan_data, prior_standata, dynamic, sticky_prior,
       flow_specification = "frozen",
       # Subsampled bounds use finite-difference curvature (the package switches
       # to an exact Hessian-vector product where one exists).
-      use_fd_hvp = TRUE, curvature_backend = "finite_difference",
+      curvature_backend = "finite_difference",
       subsampling_anchor_selection_policy = "position",
       subsampling_position_anchor_bank_spec = bank,
       support_boundary = support_boundary_control(mode = "error"))))

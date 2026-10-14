@@ -9,3 +9,9 @@ Rproj.user
 .Rproj.user
 /renv
 scripts_backups
+
+# Results are archived separately (not in git).
+results/
+simulation_results/
+tests/
+scripts_backup/

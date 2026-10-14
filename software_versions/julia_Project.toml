@@ -1,0 +1,7 @@
+[deps]
+BridgeStan = "c88b6f0a-829e-4b0b-94b7-f06ab5908f5a"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+PDMPSamplers = "7723e753-2147-4be3-a245-de95febc9fd4"
+
+[sources]
+PDMPSamplers = {path = "/home/don/github/juliapkgs/PDMPSamplers.jl"}

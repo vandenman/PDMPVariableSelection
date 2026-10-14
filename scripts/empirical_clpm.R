@@ -2,7 +2,7 @@
 # panel (11 variables, six annual waves 2008-2013, 2,670 persons).
 #
 # Run from the project root, after preparing the data with
-# ../dataset/prepare_liss_health.R:
+# scripts/prepare_liss_health.R:
 #     Rscript scripts/empirical_clpm.R
 # The sections are: 1. settings  2. data  3. fits  4. summary  5. trajectory
 # for the figure (scripts/plot_empirical_clpm.R).

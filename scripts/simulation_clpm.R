@@ -161,7 +161,7 @@ fit_clpm <- function(z, N, P, T, prior, sampler, seed, id, retained = retained_T
       list(model_prior = betabernoulli(1, 4),
            slab_prior = exchangeable_gaussian_slab(
              mean = 0, u = slab_sd^2 * (1 - slab_correlation),
-             v = slab_sd^2 * slab_correlation, zero_mean = TRUE,
+             v = slab_sd^2 * slab_correlation,
              coef = parameter_names[selectable]))
     }
     # The initial speed of the cross-lags comes from the Laplace standard

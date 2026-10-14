@@ -18,3 +18,6 @@ stanmodels/
 # simulation and analysis entry points.
 scripts_backup/
 scripts/Research/
+scripts/deprecated/
+scripts/Manual/
+tests/
