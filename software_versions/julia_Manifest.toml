@@ -395,7 +395,9 @@ version = "2.0.1"
 
 [[deps.PDMPSamplers]]
 deps = ["ADTypes", "AliasTables", "DataStructures", "DifferentiationInterface", "Distributions", "ElasticArrays", "FillArrays", "IrrationalConstants", "LinearAlgebra", "LogExpFunctions", "PDMats", "ProgressMeter", "QuadGK", "Random", "Roots", "SparseArrays", "SpecialFunctions", "Statistics", "StatsBase"]
-path = "/home/don/github/juliapkgs/PDMPSamplers.jl"
+git-tree-sha1 = "113c8a370e2426cf5e3165777c362018984b4769"
+repo-rev = "78254e3d46923169b5115c3627bb80a313955f0e"
+repo-url = "https://github.com/vandenman/PDMPSamplers.jl"
 uuid = "7723e753-2147-4be3-a245-de95febc9fd4"
 version = "0.1.0"
 
