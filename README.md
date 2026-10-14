@@ -2,7 +2,7 @@
 
 Code for the simulation studies, the empirical example and the figures of
 *Accelerating Bayesian Variable Selection Using Piecewise Deterministic Markov
-Processes* (Psychometrika). The samplers are implemented in the Julia package
+Processes*. The samplers are implemented in the Julia package
 [PDMPSamplers.jl](https://github.com/vandenman/PDMPSamplers.jl) and used from R
 through [PDMPSamplersR](https://github.com/vandenman/PDMPSamplersR).
 
@@ -80,10 +80,11 @@ choose `SIM_WORKERS` accordingly.
 
 ### Data of the empirical example
 
-The empirical example uses the LISS panel, which is available from the
-[LISS data archive](https://www.lissdata.nl/) after registration. The data
-cannot be shared here. Download the SPSS files of the Core Study Health module
-for the waves 2008 to 2013 (`ch08b` to `ch13g`, English versions) into a
+The empirical example uses the
+[Health study of the LISS Core Study](https://www.dataarchive.lissdata.nl/study-units/view/12)
+(<https://doi.org/10.17026/dans-ze3-5uk9>), which is available from the LISS
+data archive after registration. The data cannot be shared here. Download the
+English SPSS files of waves 2 to 7 (2008 to 2013; `ch08b` to `ch13g`) into a
 folder `dataset/LISS/` next to this project, and run
 `Rscript scripts/prepare_liss_health.R`; it writes
 `../dataset/liss_health_panel.csv`, which `scripts/empirical_clpm.R` reads.
@@ -91,8 +92,7 @@ folder `dataset/LISS/` next to this project, and run
 ## Software versions and the reported results
 
 The fits reported in the paper were computed with PDMPSamplers.jl and
-PDMPSamplersR at the commits tagged `psychometrika-rerun-2026-10` in both
+PDMPSamplersR at the commits tagged `paper-rerun-2026-10` in both
 repositories. The scripts here need the later versions pinned in `renv.lock`
 and `julia/`, which simplify those packages without changing the samplers'
-targets; see
-`software_versions/README.md` for the versions and the checks that were run.
+targets; see `software_versions/README.md` for the versions and the checks that were run.

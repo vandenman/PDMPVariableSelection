@@ -2,7 +2,8 @@
 #
 # Input:  the LISS Core Study Health module, one SPSS file per wave, in
 #         ../dataset/LISS/ (files chYYw_EN_*.sav from
-#         https://www.dataarchive.lissdata.nl), next to this project.
+#         https://www.dataarchive.lissdata.nl/study-units/view/12, waves 2-7),
+#         next to this project.
 # Output: ../dataset/liss_health_panel.csv (read by scripts/empirical_clpm.R),
 #         one row per person and wave:
 #           id, wave, year, followed by the 11 variables below,
